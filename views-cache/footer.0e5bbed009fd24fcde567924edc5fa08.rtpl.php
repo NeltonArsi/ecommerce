@@ -19,7 +19,7 @@
     <div class="tab-content">
       <!-- Home tab content -->
       <div class="tab-pane active" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <h3 class="control-sidebar-heading">Atividades recentes</h3>
         <ul class="control-sidebar-menu">
           <li>
             <a href="javascript:;">
@@ -35,12 +35,12 @@
         </ul>
         <!-- /.control-sidebar-menu -->
 
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
+        <h3 class="control-sidebar-heading">Progresso das tarefas</h3>
         <ul class="control-sidebar-menu">
           <li>
             <a href="javascript:;">
               <h4 class="control-sidebar-subheading">
-                Custom Template Design
+                Modelo personalizado
                 <span class="pull-right-container">
                   <span class="label label-danger pull-right">70%</span>
                 </span>
@@ -62,16 +62,16 @@
       <!-- Settings tab content -->
       <div class="tab-pane" id="control-sidebar-settings-tab">
         <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
+          <h3 class="control-sidebar-heading">Configurações gerais</h3>
 
           <div class="form-group">
             <label class="control-sidebar-subheading">
-              Report panel usage
+              Relatório de uso do painel
               <input type="checkbox" class="pull-right" checked>
             </label>
 
             <p>
-              Some information about this general settings option
+              Algumas opções de configurações gerais
             </p>
           </div>
           <!-- /.form-group -->

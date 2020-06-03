@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Hcode;
 
@@ -6,46 +6,40 @@ class Model {
 
 	private $values = [];
 
-	public function setData($data)
-	{
-
-		foreach ($data as $key => $value)
-		{
-
-			$this->{"set".$key}($value);
-
-		}
-
-	}
-
-	public function __call($name, $args)
-	{
+	public function __call($name, $args) {
 
 		$method = substr($name, 0, 3);
 		$fieldName = substr($name, 3, strlen($name));
 
-		if (in_array($fieldName, $this->fields))
-		{
-			
-			switch ($method)
-			{
+		//if (in_array($fieldName, $this->fields)) {
 
-				case "get":
-					return $this->values[$fieldName];
-				break;
+		switch ($method) {
 
-				case "set":
-					$this->values[$fieldName] = $args[0];
-				break;
+		case "get":
+			return $this->values[$fieldName];
+			break;
 
-			}
+		case "set":
+			$this->values[$fieldName] = $args[0];
+			break;
+
+		}
+
+		//}
+
+	}
+
+	public function setData($data = array()) {
+
+		foreach ($data as $key => $value) {
+
+			$this->{"set" . $key}($value);
 
 		}
 
 	}
 
-	public function getValues()
-	{
+	public function getValues() {
 
 		return $this->values;
 
@@ -53,4 +47,4 @@ class Model {
 
 }
 
- ?>
+?>
