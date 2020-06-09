@@ -36,7 +36,7 @@
                                     <ins>R${function="formatPrice($product.vlprice)"}</ins>
                                 </div>    
                                 
-                                <form action="/site/cart/{$product.idproduct}/add" class="cart">
+                                <form action="/cart/{$product.idproduct}/add" class="cart">
                                     <div class="quantity">
                                         <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="qtd" min="1" step="1">
                                     </div>
@@ -44,7 +44,7 @@
                                 </form>   
                                 
                                 <div class="product-inner-category">
-                                    <p>Categorias: |{loop="$categories"} <a href="/site/categories/{$value.idcategory}">{$value.descategory}</a> | {/loop}
+                                    <p>Categorias: |{loop="$categories"} <a href="/categories/{$value.idcategory}">{$value.descategory}</a> | {/loop}
                                 </div> 
                                 
                                 <div role="tabpanel">

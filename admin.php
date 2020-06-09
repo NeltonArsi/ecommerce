@@ -3,7 +3,7 @@
 use \Hcode\Model\User;
 use \Hcode\PageAdmin;
 
-$app->get('/admin', function () {
+$app->get("/admin", function () {
 
 	User::verifyLogin();
 	$page = new PageAdmin();
@@ -11,7 +11,7 @@ $app->get('/admin', function () {
 
 });
 
-$app->get('/admin/login', function () {
+$app->get("/admin/login", function () {
 
 	$page = new PageAdmin([
 		"header" => false,
@@ -21,16 +21,16 @@ $app->get('/admin/login', function () {
 
 });
 
-$app->post('/admin/login', function () {
+$app->post("/admin/login", function () {
 
-	User::login(post('deslogin'), post('despassword'));
+	User::login($_POST["login"], $_POST["password"]);
 
 	header("Location: /admin");
 	exit;
 
 });
 
-$app->get('/admin/logout', function () {
+$app->get("/admin/logout", function () {
 
 	User::logout();
 
@@ -39,7 +39,7 @@ $app->get('/admin/logout', function () {
 
 });
 
-$app->get('/admin/forgot', function () {
+$app->get("/admin/forgot", function () {
 
 	$page = new PageAdmin([
 		"header" => false,
@@ -89,9 +89,7 @@ $app->post('/admin/forgot/reset', function () {
 	$user = new User();
 	$user->get((int) $forgot["iduser"]);
 
-	$password = password_hash($_POST["password"], PASSWORD_DEFAULT, [
-		"cost" => 12,
-	]);
+	$password = User::getPasswordHash($_POST["password"]);
 	$user->setPassword($password);
 
 	$page = new PageAdmin([

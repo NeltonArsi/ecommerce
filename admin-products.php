@@ -75,7 +75,7 @@ $app->get("/admin/products/:idproduct/delete", function ($idproduct) {
 });
 
 /**
-$app->get("/site/categories/:idcategory", function ($idcategory) {
+$app->get("/categories/:idcategory", function ($idcategory) {
 
 $category = new Category();
 $category->get((int) $idcategory);

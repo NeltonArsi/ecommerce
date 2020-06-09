@@ -466,7 +466,7 @@
             <span class="footer-group">
               <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
               <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="#">Support</a>
+              <a href="#">Suporte</a>
             </span>
           </div>
         </td>

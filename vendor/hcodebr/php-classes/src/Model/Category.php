@@ -55,10 +55,10 @@ class Category extends Model {
 		$categories = Category::listAll();
 		$html = [];
 		foreach ($categories as $row) {
-			array_push($html, '<li><a href="/site/categories/' . $row['idcategory'] . '">' . $row['descategory'] . '</a></li>');
+			array_push($html, '<li><a href="/categories/' . $row['idcategory'] . '">' . $row['descategory'] . '</a></li>');
 		}
 
-		file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "site" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
 
 	}
 
