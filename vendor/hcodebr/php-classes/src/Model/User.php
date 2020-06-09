@@ -13,7 +13,7 @@ class User extends Model {
 	const SECRET_IV = "HcodePhp7_Secret_IV";
 	const ERROR = "UserError";
 	const ERROR_REGISTER = "UserErrorRegister";
-	//const SUCCESS = "UserSucesss";
+	const SUCCESS = "UserSucesss";
 
 	public static function getFromSession() {
 
@@ -244,7 +244,6 @@ class User extends Model {
 	public static function getError() {
 
 		$msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
-
 		User::clearError();
 
 		return $msg;
@@ -257,27 +256,26 @@ class User extends Model {
 
 	}
 
-	/*public static function setSuccess($msg) {
+	public static function setSuccess($msg) {
 
-			$_SESSION[User::SUCCESS] = $msg;
+		$_SESSION[User::SUCCESS] = $msg;
 
-		}
+	}
 
-		public static function getSuccess() {
+	public static function getSuccess() {
 
-			$msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : '';
+		$msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : '';
+		User::clearSuccess();
 
-			User::clearSuccess();
+		return $msg;
 
-			return $msg;
+	}
 
-		}
+	public static function clearSuccess() {
 
-		public static function clearSuccess() {
+		$_SESSION[User::SUCCESS] = NULL;
 
-			$_SESSION[User::SUCCESS] = NULL;
-
-	*/
+	}
 
 	public static function setErrorRegister($msg) {
 
@@ -288,7 +286,6 @@ class User extends Model {
 	public static function getErrorRegister() {
 
 		$msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
-
 		User::clearErrorRegister();
 
 		return $msg;
