@@ -58,7 +58,7 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="/res/admin/index2.html" class="logo">
+    <a href="/admin" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->
@@ -174,18 +174,18 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="/res/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <!--img src="/res/admin/dist/img/user2-160x160.jpg" class="user-image" alt="User Image"-->
+              <img src="/res/admin/img/users/user_<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"><?php echo htmlspecialchars( $user["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
+                <img src="/res/admin/img/users/user_<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg" class="img-circle" alt="User Image">
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo htmlspecialchars( $user["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?>
+                  <small>Membro desde <?php echo formatDate($user["dtregister"]); ?></small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -205,8 +205,11 @@ desired effect
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
+                <!--div class="pull-left"-->
+                  <!--a href="#" class="btn btn-default btn-flat">Perfil</a-->
+                <!--/div-->
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
+                  <a href="/admin/users/<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/avatar" class="btn btn-default btn-flat">Alterar Foto</a>
                 </div>
                 <div class="pull-right">
                   <a href="/admin/logout" class="btn btn-default btn-flat">Sair</a>
@@ -231,10 +234,10 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/res/admin/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="/res/admin/img/users/user_<?php echo htmlspecialchars( $user["iduser"], ENT_COMPAT, 'UTF-8', FALSE ); ?>.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?php echo htmlspecialchars( $user["desperson"], ENT_COMPAT, 'UTF-8', FALSE ); ?></p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -243,7 +246,7 @@ desired effect
       <!-- search form (Optional) -->
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Procurar...">
+          <input type="text" name="q" class="form-control" placeholder="Procurar..."  onfocus="this.value='';">
               <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>

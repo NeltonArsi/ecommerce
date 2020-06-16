@@ -3,7 +3,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    Editar Senha
+    Alterar Avatar
   </h1>
 </section>
 
@@ -32,21 +32,27 @@
         </div>
         {/if}
 
-        <form role="form" action="/admin/users/{$user.iduser}/password" method="post">
+        <form role="form" action="/admin/users/{$user.iduser}/avatar" method="post">
           <div class="box-body">
-            <div class="form-group">
-              <label for="despassword">Nova Senha</label>
-              <input type="password" class="form-control" id="despassword" name="despassword" placeholder="Nova senha">
-            </div>
-            <div class="form-group">
-              <label for="despassword-confirm">Confirme a senha</label>
-              <input type="password" class="form-control" id="despassword-confirm" name="despassword-confirm" placeholder="Confirme a nova senha">
+            <div class="input-group input-group-sm">
+              <!--label for="file">Foto</label-->
+              <input type="file" class="form-control pull-right" id="file" name="file">
+              <div class="input-group input-group-sm">
+                <button type="submit" class="btn btn-default"><i class="fa fa-save"></i></button>
+              </div>
+              <div class="box box-widget">
+                <div class="box-body">
+                  <img class="img-responsive" id="image-preview" src="{$user.desphoto}" alt="Photo">
+                </div>
+              </div>
             </div>
           </div>
+
           <!-- /.box-body -->
-          <div class="box-footer">
+          <!--div class="box-footer">
+            <button type="submit" class="btn btn-default" name="file"><i class="fa fa-camera"></i></button>
             <button type="submit" class="btn btn-primary">Salvar</button>
-          </div>
+          </div-->
         </form>
       </div>
   	</div>

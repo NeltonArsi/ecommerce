@@ -336,6 +336,71 @@ class User extends Model {
 
 	}
 
+	public function checkPhoto() {
+
+		if (file_exists($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+			"res" . DIRECTORY_SEPARATOR .
+			"admin" . DIRECTORY_SEPARATOR .
+			"img" . DIRECTORY_SEPARATOR .
+			"users" . DIRECTORY_SEPARATOR .
+			"user_" . $this->getiduser() . ".jpg"
+		)) {
+
+			$url = "/res/admin/img/users/user_" . $this->getiduser() . ".jpg";
+
+		} else {
+
+			$url = "/res/admin/img/users/user.jpg";
+
+		}
+
+		$this->setdesphoto($url);
+	
+	}
+
+	public function getValues() {
+
+		$this->checkPhoto();
+
+		$values = parent::getValues();
+
+		return $values;
+
+	}
+
+	public function setPhoto($file) {
+
+		$extension = explode('.', $file['name']);
+		$extension = end($extension);
+
+		switch ($extension) {
+		case "jpg":
+		case "jpeg":
+			$image = imagecreatefromjpeg($file['tmp_name']);
+			break;
+		case "gif":
+			$image = imagecreatefromgif($file['tmp_name']);
+			break;
+		case "png":
+			$image = imagecreatefrompng($file['tmp_name']);
+			break;
+
+		}
+
+		$dist = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR .
+		"res" . DIRECTORY_SEPARATOR .
+		"admin" . DIRECTORY_SEPARATOR .
+		"img" . DIRECTORY_SEPARATOR .
+		"users" . DIRECTORY_SEPARATOR .
+		"user_" . $this->getiduser() . ".jpg";
+
+		imagejpeg($image, $dist);
+		imagedestroy($image);
+
+		$this->checkPhoto();
+
+	}
+
 	public static function getPage($page = 1, $itemsPerPage = 10) {
 
 		$start = ($page - 1) * $itemsPerPage;
