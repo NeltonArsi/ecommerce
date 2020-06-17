@@ -344,7 +344,7 @@ class User extends Model {
 			"img" . DIRECTORY_SEPARATOR .
 			"users" . DIRECTORY_SEPARATOR .
 			"user_" . $this->getiduser() . ".jpg"
-		)) {
+			)) {
 
 			$url = "/res/admin/img/users/user_" . $this->getiduser() . ".jpg";
 

@@ -23,6 +23,10 @@ $app->post("/admin/users/:iduser/avatar", function ($iduser) {
 	$user = new User();
 	$user->get((int) $iduser);
 	$user->setData($_POST);
+
+	echo json_encode($_FILES);
+	exit;
+
 	if ($_FILES["file"]["name"] !== "") {
 		$user->setPhoto($_FILES["file"]);
 	}
