@@ -240,16 +240,19 @@ $app->post("/checkout", function () {
 	]);
 	$order->save();
 
-	//switch ((int)$_POST['payment-method']) {
-		//case 1:
-		header("Location: /order/".$order->getidorder()."/pagseguro");
-		//break;
+	switch ((int)$_POST['payment-method']) {
+		case 1:
+		header("Location: /order/".$order->getidorder());
+		break;
 
-		//case 2:
-		//header("Location: /order/".$order->getidorder()."/paypal");
-		//break;
-	//}
-	//header("Location: /order/".$order->getidorder());
+		case 2:
+		header("Location: /order/".$order->getidorder()."/pagseguro");
+		break;
+
+		case 3:
+		header("Location: /order/".$order->getidorder()."/paypal");
+		break;
+	}
 	exit;
 
 });
@@ -274,7 +277,6 @@ $app->get("/order/:idorder/pagseguro", function($idorder){
 			'number'=>substr($order->getnrphone(), 2, strlen($order->getnrphone()))
 		]
 	]);
-
 
 });
 
