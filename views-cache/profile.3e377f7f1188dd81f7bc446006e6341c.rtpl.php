@@ -16,11 +16,11 @@
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">                
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <?php require $this->checkTemplate("profile-menu");?>
 
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <?php if( $profileMsg != '' ){ ?>
 
                 <div class="alert alert-success">

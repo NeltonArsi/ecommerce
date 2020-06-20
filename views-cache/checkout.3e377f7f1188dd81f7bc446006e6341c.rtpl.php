@@ -50,6 +50,14 @@
 											</tbody>
 										</table>
                                         <?php } ?>
+										<form action="/profile-address" class="new-address" method="post" name="new-addres">
+											<div id="new-address">
+												<div class="form-row place-order">
+													<input type="submit" data-value="Place order" value="Novo Endereço" id="place_order" name="woocommerce_checkout_place_order" style="margin-top: 30px; "class="button alt">
+												</div>
+												<div class="clear"></div>
+											</div>     
+										</form>                                   
 									</div>
 								</div>								
 								<div class="col-md-5">

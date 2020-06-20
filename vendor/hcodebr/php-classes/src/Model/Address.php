@@ -7,6 +7,7 @@ use \Hcode\Model;
 
 class Address extends Model {
 
+	const SESSION_SUCCESS = "AddressSuccess";
 	const SESSION_ERROR = "AddressError";
 
 	public static function getCEP($nrcep) {
@@ -99,6 +100,27 @@ class Address extends Model {
 	public static function clearMsgError() {
 
 		$_SESSION[Address::SESSION_ERROR] = NULL;
+
+	}
+
+	public static function setMsgSuccess($msg) {
+
+		$_SESSION[Address::SESSION_SUCCESS] = $msg;
+
+	}
+
+	public static function getMsgSuccess() {
+
+		$msg = (isset($_SESSION[Address::SESSION_SUCCESS]) && $_SESSION[Address::SESSION_SUCCESS]) ? $_SESSION[Address::SESSION_SUCCESS] : '';
+		Address::clearMsgSuccess();
+
+		return $msg;
+
+	}
+
+	public static function clearMsgSuccess() {
+
+		$_SESSION[Address::SESSION_SUCCESS] = NULL;
 
 	}
 
