@@ -75,6 +75,9 @@ $app->post("/admin/products/:idproduct", function ($idproduct) {
 	$product->get((int) $idproduct);
 	$product->setData($_POST);
 	$product->save();
+/**	if ((int) $_FILES["file"]["size"] > 0) {
+$product->setPhoto($_FILES["file"]);
+}**/
 	if ($_FILES["file"]["name"] !== "") {
 		$product->setPhoto($_FILES["file"]);
 	}

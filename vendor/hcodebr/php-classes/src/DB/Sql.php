@@ -19,6 +19,7 @@ class Sql {
 			Sql::PASSWORD,
 			array(
 				\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
+				//\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;SET time_zone='America/Sao_Paulo'",
 			)
 		);
 

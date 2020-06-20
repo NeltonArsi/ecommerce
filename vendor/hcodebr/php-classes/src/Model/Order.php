@@ -38,9 +38,7 @@ class Order extends Model {
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser
 			INNER JOIN tb_addresses e USING(idaddress)
-			INNER JOIN tb_persons f ON f.idperson = d.idperson
-			WHERE a.idorder = :idorder
-		", [
+			WHERE a.idorder = :idorder", [
 			':idorder' => $idorder,
 		]);
 
@@ -59,7 +57,6 @@ class Order extends Model {
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser
 			INNER JOIN tb_addresses e USING(idaddress)
-			INNER JOIN tb_persons f ON f.idperson = d.idperson
 			ORDER BY a.dtregister DESC
 		");
 
@@ -136,7 +133,6 @@ class Order extends Model {
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser
 			INNER JOIN tb_addresses e USING(idaddress)
-			INNER JOIN tb_persons f ON f.idperson = d.idperson
 			ORDER BY a.dtregister DESC
 			LIMIT $start, $itemsPerPage;
 		");
@@ -161,8 +157,7 @@ class Order extends Model {
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser
 			INNER JOIN tb_addresses e USING(idaddress)
-			INNER JOIN tb_persons f ON f.idperson = d.idperson
-			WHERE a.idorder = :id OR f.desperson LIKE :search OR b.desstatus LIKE :search
+			WHERE a.idorder = :id OR d.desperson LIKE :search OR b.desstatus LIKE :search
 			ORDER BY a.dtregister DESC
 			LIMIT $start, $itemsPerPage;
 		", [

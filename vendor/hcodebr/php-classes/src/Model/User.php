@@ -54,7 +54,7 @@ class User extends Model {
 	public static function login($login, $password) {
 
 		$sql = new Sql();
-		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN", array(
+		$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
 			":LOGIN" => $login,
 		));
 
@@ -81,8 +81,10 @@ class User extends Model {
 		if (!User::checkLogin($inadmin)) {
 			if ($inadmin) {
 				header("Location: /admin/login");
+				exit;
 			} else {
 				header("Location: /login");
+				exit;
 			}
 			exit;
 		}
@@ -98,20 +100,20 @@ class User extends Model {
 	public static function listAll() {
 
 		$sql = new Sql();
-		return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson");
+		return $sql->select("SELECT * FROM tb_users ORDER BY desperson");
 
 	}
 
 	public function save() {
 
 		$sql = new Sql();
-		$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+		$results = $sql->select("CALL sp_users_save(:desperson, :desemail, :deslogin, :despassword, :inadmin, :nrphone)", array(
 			":desperson" => utf8_decode($this->getdesperson()),
+			":desemail" => $this->getdesemail(),
 			":deslogin" => $this->getdeslogin(),
 			":despassword" => User::getPasswordHash($this->getdespassword()),
-			":desemail" => $this->getdesemail(),
-			":nrphone" => $this->getnrphone(),
 			":inadmin" => $this->getinadmin(),
+			":nrphone" => $this->getnrphone(),
 		));
 
 		$this->setData($results[0]);
@@ -121,7 +123,7 @@ class User extends Model {
 	public function get($iduser) {
 
 		$sql = new Sql();
-		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", array(
+		$results = $sql->select("SELECT * FROM tb_users WHERE iduser = :iduser", array(
 			":iduser" => $iduser,
 		));
 
@@ -134,17 +136,17 @@ class User extends Model {
 	public function update() {
 
 		$sql = new Sql();
-		$results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+		$results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :desemail, :deslogin, :despassword, :inadmin, :nrphone)", array(
 			":iduser" => $this->getiduser(),
 			":desperson" => utf8_decode($this->getdesperson()),
+			":desemail" => $this->getdesemail(),
 			":deslogin" => $this->getdeslogin(),
 			":despassword" => $this->getdespassword(),
-			":desemail" => $this->getdesemail(),
-			":nrphone" => $this->getnrphone(),
 			":inadmin" => $this->getinadmin(),
+			":nrphone" => $this->getnrphone(),
 		));
 		$this->setData($results[0]);
-		$_SESSION[User::SESSION] = $this->getValues();
+		//$_SESSION[User::SESSION] = $this->getValues();
 		
 	}
 
@@ -160,7 +162,7 @@ class User extends Model {
 	public static function getForgot($email, $inadmin = true) {
 
 		$sql = new Sql();
-		$results = $sql->select("SELECT * FROM tb_persons a INNER JOIN tb_users b USING(idperson) WHERE a.desemail = :email;", array(
+		$results = $sql->select("SELECT * FROM tb_users WHERE desemail = :email;", array(
 			":email" => $email,
 		));
 
@@ -204,7 +206,12 @@ class User extends Model {
 		$code = base64_decode($code);
 		$idrecovery = openssl_decrypt($code, 'AES-128-CBC', pack("a16", User::SECRET), 0, pack("a16", User::SECRET_IV));
 		$sql = new Sql();
-		$results = $sql->select("SELECT * FROM tb_userspasswordsrecoveries a INNER JOIN tb_users b USING(iduser) INNER JOIN tb_persons c USING(idperson) WHERE a.idrecovery = :idrecovery AND a.dtrecovery IS NULL AND DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();", array(
+		$results = $sql->select("
+			SELECT * FROM tb_userspasswordsrecoveries a 
+			INNER JOIN tb_users b USING(iduser) 
+			WHERE a.idrecovery = :idrecovery 
+			AND a.dtrecovery IS NULL 
+			AND DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();", array(
 			":idrecovery" => $idrecovery,
 		));
 
@@ -326,7 +333,21 @@ class User extends Model {
 			INNER JOIN tb_carts c USING(idcart)
 			INNER JOIN tb_users d ON d.iduser = a.iduser
 			INNER JOIN tb_addresses e USING(idaddress)
-			INNER JOIN tb_persons f ON f.idperson = d.idperson
+			WHERE a.iduser = :iduser
+		", [
+			':iduser'=>$this->getiduser()
+		]);
+
+		return $results;
+
+	}
+
+	public function getAddress() {
+
+		$sql = new Sql();
+		$results = $sql->select("
+			SELECT * FROM tb_addresses a 
+			INNER JOIN tb_users b ON b.iduser = a.iduser
 			WHERE a.iduser = :iduser
 		", [
 			':iduser'=>$this->getiduser()
@@ -407,9 +428,8 @@ class User extends Model {
 		$sql = new Sql();
 		$results = $sql->select("
 			SELECT SQL_CALC_FOUND_ROWS *
-			FROM tb_users a 
-			INNER JOIN tb_persons b USING(idperson) 
-			ORDER BY b.desperson
+			FROM tb_users 
+			ORDER BY desperson
 			LIMIT $start, $itemsPerPage;
 		");
 		$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
@@ -428,10 +448,9 @@ class User extends Model {
 		$sql = new Sql();
 		$results = $sql->select("
 			SELECT SQL_CALC_FOUND_ROWS *
-			FROM tb_users a 
-			INNER JOIN tb_persons b USING(idperson)
-			WHERE b.desperson LIKE :search OR b.desemail LIKE :search OR a.deslogin LIKE :search
-			ORDER BY b.desperson
+			FROM tb_users 
+			WHERE desperson LIKE :search OR desemail LIKE :search OR deslogin LIKE :search
+			ORDER BY desperson
 			LIMIT $start, $itemsPerPage;
 		", [
 			':search'=>'%'.$search.'%'

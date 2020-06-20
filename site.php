@@ -59,6 +59,7 @@ $app->get("/products/:desurl", function ($desurl) {
 $app->get("/cart", function () {
 
 	$cart = Cart::getFromSession();
+	$cart->checkZipCode();
 	$page = new Page();
 	$page->setTpl("cart", [
 		'cart' => $cart->getValues(),
@@ -119,66 +120,25 @@ $app->post("/cart/freight", function () {
 $app->get("/checkout", function () {
 
 	User::verifyLogin(false);
+	$user = User::getFromSession();
 	$address = new Address();
 	$cart = Cart::getFromSession();
-	if (!isset($_GET['zipcode'])) {
-		$_GET['zipcode'] = $cart->getdeszipcode();
-	}
-
-	if (isset($_GET['zipcode'])) {
-		$address->loadFromCEP($_GET['zipcode']);
-		$cart->setdeszipcode($_GET['zipcode']);
-		$cart->save();
-		$cart->getCalculateTotal();
-	}
-
-	if (!$address->getdesaddress()) {
-		$address->setdesaddress('');
-	}
-
-	if (!$address->getdesnumber()) {
-		$address->setdesnumber('');
-	}
-
-	if (!$address->getdescomplement()) {
-		$address->setdescomplement('');
-	}
-
-	if (!$address->getdesdistrict()) {
-		$address->setdesdistrict('');
-	}
-
-	if (!$address->getdescity()) {
-		$address->setdescity('');
-	}
-
-	if (!$address->getdesstate()) {
-		$address->setdesstate('');
-	}
-
-	if (!$address->getdescountry()) {
-		$address->setdescountry('');
-	}
-
-	if (!$address->getdeszipcode()) {
-		$address->setdeszipcode('');
-	}
-
 	$page = new Page();
+
 	$page->setTpl("checkout", [
-		'cart' => $cart->getValues(),
-		'address' => $address->getValues(),
-		'products' => $cart->getProducts(),
-		'error' => Address::getMsgError(),
+		'address'=>$user->getAddress(),
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts(),
+		'error'=>Address::getMsgError()
 	]);
 
 });
 
-$app->post("/checkout", function () {
+/**$app->post("/checkout", function () {
 
-	User::verifyLogin(false);
+	//User::verifyLogin(false);
 
-	if (!isset($_POST['zipcode']) || $_POST['zipcode'] === '') {
+/**	if (!isset($_POST['zipcode']) || $_POST['zipcode'] === '') {
 		Address::setMsgError("Informe o CEP.");
 		header('Location: /checkout');
 		exit;
@@ -220,14 +180,17 @@ $app->post("/checkout", function () {
 		exit;
 	}
 
+
+	User::verifyLogin(false);
+
 	$user = User::getFromSession();
 	$address = new Address();
 	
-	$_POST['deszipcode'] = $_POST['zipcode'];
-	$_POST['idperson'] = $user->getidperson();
+	//$_POST['deszipcode'] = $_POST['zipcode'];
+	//$_POST['iduser'] = $user->getiduser();
 	
-	$address->setData($_POST);
-	$address->save();
+	//$address->setData($_POST);
+	//$address->save();
 	$cart = Cart::getFromSession();
 	$cart->getCalculateTotal();
 	$order = new Order();
@@ -239,6 +202,7 @@ $app->post("/checkout", function () {
 		'vltotal'=>$cart->getvltotal()
 	]);
 	$order->save();
+    Cart::removeFromSession();
 
 	switch ((int)$_POST['payment-method']) {
 		case 1:
@@ -255,7 +219,7 @@ $app->post("/checkout", function () {
 	}
 	exit;
 
-});
+});**/
 
 $app->get("/order/:idorder/pagseguro", function($idorder){
 
@@ -327,8 +291,8 @@ $app->post("/login", function () {
 $app->get("/logout", function () {
 
 	User::logout();
-    Cart::removeFromSession();
-    session_regenerate_id();
+    //Cart::removeFromSession();
+    //session_regenerate_id();
 
 	header("Location: /login");
 	exit;

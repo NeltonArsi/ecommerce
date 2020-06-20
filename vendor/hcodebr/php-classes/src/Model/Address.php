@@ -38,12 +38,33 @@ class Address extends Model {
 
 	}
 
+	public function get(int $idaddress) {
+
+		$sql = new Sql();
+		$results = $sql->select("SELECT * FROM tb_addresses WHERE idaddress = :idaddress", [
+			":idaddress" => $idaddress,
+		]);
+
+		if (count($results) > 0) {
+			$this->setData($results[0]);
+		}
+
+	}
+
+	public static function listAll() {
+
+		$sql = new Sql();
+		return $sql->select("SELECT * FROM tb_addresses ORDER BY dtregister DESC");
+
+	}
+
 	public function save() {
 
 		$sql = new Sql();
-		$results = $sql->select("CALL sp_addresses_save(:idaddress, :idperson, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", [
+		$results = $sql->select("CALL sp_addresses_save(:idaddress, :iduser, :desidentifier, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", [
 			':idaddress' => $this->getidaddress(),
-			':idperson' => $this->getidperson(),
+			':iduser' => $this->getiduser(),
+			':desidentifier' => $this->getidentifier(),
 			':desaddress' => utf8_decode($this->getdesaddress()),
 			':desnumber' => $this->getdesnumber(),
 			':descomplement' => utf8_decode($this->getdescomplement()),
