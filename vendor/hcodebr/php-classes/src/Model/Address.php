@@ -55,26 +55,48 @@ class Address extends Model {
 	public static function listAll() {
 
 		$sql = new Sql();
-		return $sql->select("SELECT * FROM tb_addresses ORDER BY dtregister DESC");
+		return $sql->select("SELECT * FROM tb_addresses ORDER BY desidentifier");
 
 	}
 
 	public function save() {
 
 		$sql = new Sql();
-		$results = $sql->select("CALL sp_addresses_save(:idaddress, :iduser, :desidentifier, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", [
-			':idaddress' => $this->getidaddress(),
+		$results = $sql->select("CALL sp_addresses_save(:iduser, :desidentifier, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", array(
 			':iduser' => $this->getiduser(),
-			':desidentifier' => $this->getidentifier(),
-			':desaddress' => utf8_decode($this->getdesaddress()),
+			':desidentifier' => $this->getdesidentifier(),
+			':desaddress' => $this->getdesaddress(),
 			':desnumber' => $this->getdesnumber(),
-			':descomplement' => utf8_decode($this->getdescomplement()),
-			':descity' => utf8_decode($this->getdescity()),
-			':desstate' => utf8_decode($this->getdesstate()),
-			':descountry' => utf8_decode($this->getdescountry()),
+			':descomplement' => $this->getdescomplement(),
+			':descity' => $this->getdescity(),
+			':desstate' => $this->getdesstate(),
+			':descountry' => $this->getdescountry(),
 			':deszipcode' => $this->getdeszipcode(),
 			':desdistrict' => $this->getdesdistrict(),
-		]);
+		));
+
+		if (count($results) > 0) {
+			$this->setData($results[0]);
+		}
+
+	}
+
+	public function update() {
+
+		$sql = new Sql();
+		$results = $sql->select("CALL sp_addressesupdate_save(:idaddress, :iduser, :desidentifier, :desaddress, :desnumber, :descomplement, :descity, :desstate, :descountry, :deszipcode, :desdistrict)", array(
+			':idaddress' => $this->getidaddress(),
+			':iduser' => $this->getiduser(),
+			':desidentifier' => $this->getdesidentifier(),
+			':desaddress' => $this->getdesaddress(),
+			':desnumber' => $this->getdesnumber(),
+			':descomplement' => $this->getdescomplement(),
+			':descity' => $this->getdescity(),
+			':desstate' => $this->getdesstate(),
+			':descountry' => $this->getdescountry(),
+			':deszipcode' => $this->getdeszipcode(),
+			':desdistrict' => $this->getdesdistrict(),
+		));
 
 		if (count($results) > 0) {
 			$this->setData($results[0]);

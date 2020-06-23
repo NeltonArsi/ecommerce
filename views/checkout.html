@@ -33,8 +33,9 @@
 											<tbody>
 												<thead>
 													<tr style="line-height: 10px" class="">
-														<th class="" style="text-align:left;">{$value.desidentifier}</th>
-														<th width="15"><input type="radio" {if="$cart.deszipcode === $value.deszipcode"} checked="checked" {/if}id="address-padrao" name="address-padrao" style="float:center; margin: 5px;"></th>
+														<th class="" style="text-align:left;">{$value.desidentifier}  -  (CEP: {$value.deszipcode})</th>
+														<th class="product-name" width="15"><a href="/profile/address/{$value.idaddress}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a></th>
+														<th width="15"><input type="radio" {if="$cart.deszipcode === $value.deszipcode"} checked="checked" {/if}id="address" name="idaddress" value="{$value.idaddress}" style="float:center; margin: 5px;"></th>
 													</tr>
 												</thead>
 												<tr style="line-height: 3px" class="">
@@ -44,16 +45,24 @@
 	                                            </tr>
 												<tr style="line-height: 3px" class="">
 													<td colspan="2" class="product-name" style="text-align:left; heigth: 1px;">
-														<span>{$value.descity} / {$value.desstate} - {$value.descountry} (CEP: {$value.deszipcode})</span>
+														<span>{$value.descity} / {$value.desstate} - {$value.descountry}</span>
 													</td>
 	                                            </tr>
 											</tbody>
 										</table>
                                         {/loop}
-										<form action="/profile-address" class="new-address" method="post" name="new-addres">
+										<form action="/profile/address/update" class="address" method="get" name="address">
+											<div id="address">
+												<div class="form-row place-order">
+													<!--input type="submit" data-value="Place order" value="Alterar Endereço" id="place_order" name="woocommerce_checkout_place_order" style="margin-top: 30px; "class="button alt"-->
+												</div>
+												<div class="clear"></div>
+											</div>     
+										</form>                                   
+										<form action="/profile/address/create" class="new-address" method="get" name="new-address">
 											<div id="new-address">
 												<div class="form-row place-order">
-													<input type="submit" data-value="Place order" value="Novo Endereço" id="place_order" name="woocommerce_checkout_place_order" style="margin-top: 30px; "class="button alt">
+													<input type="submit" value="Novo Endereço" style="margin-top: 30px; "class="button alt">
 												</div>
 												<div class="clear"></div>
 											</div>     
@@ -100,12 +109,12 @@
 													<th>Frete</th>
 													<td>
 														R${function="formatPrice($cart.vlfreight)"}
-														<input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
+														<input type="hidden" value="{$cart.vlfreight}" id="vlfreight" name="vlfreight">
 													</td>
 												</tr>
 												<tr class="order-total">
 													<th>Total do Pedido</th>
-													<td><strong><span class="amount">R${function="formatPrice($cart.vltotal)"}</span></strong> </td>
+													<td><strong><span class="amount">R${function="formatPrice($cart.vltotal)"}<input type="hidden" value="{$cart.vltotal}" id="vltotal" name="vltotal"></span></strong> </td>
 												</tr>
 											</tfoot>
 										</table>

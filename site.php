@@ -129,68 +129,17 @@ $app->get("/checkout", function () {
 		'address'=>$user->getAddress(),
 		'cart'=>$cart->getValues(),
 		'products'=>$cart->getProducts(),
-		'error'=>Address::getMsgError()
+		'error'=>Order::getError(),
+		'success'=>Order::getSuccess(),
 	]);
 
 });
 
-/**$app->post("/checkout", function () {
-
-	//User::verifyLogin(false);
-
-/**	if (!isset($_POST['zipcode']) || $_POST['zipcode'] === '') {
-		Address::setMsgError("Informe o CEP.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['desaddress']) || $_POST['desaddress'] === '') {
-		Address::setMsgError("Informe o endereço.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
-		Address::setMsgError("Informe o número do endereço.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] === '') {
-		Address::setMsgError("Informe o bairro.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['descity']) || $_POST['descity'] === '') {
-		Address::setMsgError("Informe a cidade.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['desstate']) || $_POST['desstate'] === '') {
-		Address::setMsgError("Informe o estado.");
-		header('Location: /checkout');
-		exit;
-	}
-
-	if (!isset($_POST['descountry']) || $_POST['descountry'] === '') {
-		Address::setMsgError("Informe o país.");
-		header('Location: /checkout');
-		exit;
-	}
-
+$app->post("/checkout", function () {
 
 	User::verifyLogin(false);
-
 	$user = User::getFromSession();
 	$address = new Address();
-	
-	//$_POST['deszipcode'] = $_POST['zipcode'];
-	//$_POST['iduser'] = $user->getiduser();
-	
-	//$address->setData($_POST);
-	//$address->save();
 	$cart = Cart::getFromSession();
 	$cart->getCalculateTotal();
 	$order = new Order();
@@ -201,8 +150,13 @@ $app->get("/checkout", function () {
 		'idstatus'=>OrderStatus::EM_ABERTO,
 		'vltotal'=>$cart->getvltotal()
 	]);
+	
+	//var_dump($_POST);
+	//exit;
+	
 	$order->save();
     Cart::removeFromSession();
+	Order::setSuccess("Pedido cadastrado com sucesso.");
 
 	switch ((int)$_POST['payment-method']) {
 		case 1:
@@ -219,7 +173,7 @@ $app->get("/checkout", function () {
 	}
 	exit;
 
-});**/
+});
 
 $app->get("/order/:idorder/pagseguro", function($idorder){
 
@@ -611,19 +565,32 @@ $app->post("/profile/change-password", function(){
 
 });
 
-$app->get("/profile/address", function(){
+$app->get("/profile/addresses", function(){
+
+	User::verifyLogin(false);
+	$user = User::getFromSession();
+	$address = new Address();
+	$cart = Cart::getFromSession();
+	$page = new Page();
+
+	$page->setTpl("profile-addresses", [
+		'address'=>$user->getAddress(),
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts(),
+		'error'=>Address::getMsgError(),
+		'success'=>Address::getMsgSuccess()
+	]);
+
+});
+
+$app->get("/profile/address/create", function(){
 
 	User::verifyLogin(false);
 	$user = User::getFromSession();
 	$address = new Address();
 
-	if (!isset($_GET['zipcode'])) {
-		$_GET['zipcode'] = $address->getdeszipcode();
-	}
-
-	if (isset($_GET['zipcode'])) {
-		$address->loadFromCEP($_GET['zipcode']);
-		$address->setdeszipcode($_GET['zipcode']);
+	if (isset($_GET['deszipcode'])) {
+		$address->loadFromCEP($_GET['deszipcode']);
 	}
 
 	if (!$address->getdesidentifier()) $address->setdesidentifier('');
@@ -637,7 +604,7 @@ $app->get("/profile/address", function(){
 	if (!$address->getdeszipcode()) $address->setdeszipcode('');
 
 	$page = new Page();
-	$page->setTpl("profile-address", [
+	$page->setTpl("profile-address-create", [
 		'user'=>$user->getValues(),
 		'address'=>$address->getValues(),
 		'error'=>Address::getMsgError(),
@@ -646,62 +613,145 @@ $app->get("/profile/address", function(){
 
 });
 
-$app->post("/profile/address", function(){
+$app->get("/profile/address/:idaddress", function($idaddress){
+
+	User::verifyLogin(false);
+	$user = User::getFromSession();
+	$address = new Address();
+	$address->get((int)$idaddress);
+	$page = new Page();
+	$page->setTpl("profile-address-update", [
+		'user'=>$user->getValues(),
+		'address'=>$address->getValues(),
+		'error'=>Address::getMsgError(),
+		'success'=>Address::getMsgSuccess()
+	]);
+
+});
+
+$app->post("/profile/address/create", function(){
 
 	User::verifyLogin(false);
 
-	if (!isset($_POST['zipcode']) || $_POST['zipcode'] === '') {
+	if (!isset($_POST['deszipcode']) || $_POST['deszipcode'] === '') {
 		Address::setMsgError("Informe o CEP.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
+		exit;
+	}
+
+	if (!isset($_POST['desidentifier']) || $_POST['desidentifier'] === '') {
+		Address::setMsgError("Informe a identificação do endereço.");
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['desaddress']) || $_POST['desaddress'] === '') {
 		Address::setMsgError("Informe o endereço.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
 		Address::setMsgError("Informe o número do endereço.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] === '') {
 		Address::setMsgError("Informe o bairro.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['descity']) || $_POST['descity'] === '') {
 		Address::setMsgError("Informe a cidade.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['desstate']) || $_POST['desstate'] === '') {
 		Address::setMsgError("Informe o estado.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
 	if (!isset($_POST['descountry']) || $_POST['descountry'] === '') {
 		Address::setMsgError("Informe o país.");
-		header('Location: /profile/address');
+		header('Location: /profile/address/create');
 		exit;
 	}
 
-	//var_dump($_POST);
-	//exit;
-
 	$user = User::getFromSession();
 	$address = new Address();
-	$_POST['deszipcode'] = $_POST['zipcode'];
+	$_POST['deszipcode'] = $_POST['deszipcode'];
 	$_POST['iduser'] = $user->getiduser();
 	$address->setData($_POST);
 	$address->save();
-	header('Location: /profile/address');
+	Address::setMsgSuccess("Endereço cadastrado com sucesso.");
+	header('Location: /profile/addresses');
+	exit;
+
+});
+
+$app->post("/profile/address/:idaddress", function($idaddress){
+
+	User::verifyLogin(false);
+	
+	if (!isset($_POST['deszipcode']) || $_POST['deszipcode'] === '') {
+		Address::setMsgError("Informe o CEP.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['desidentifier']) || $_POST['desidentifier'] === '') {
+		Address::setMsgError("Informe a identificação do endereço.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['desaddress']) || $_POST['desaddress'] === '') {
+		Address::setMsgError("Informe o endereço.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
+		Address::setMsgError("Informe o número do endereço.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] === '') {
+		Address::setMsgError("Informe o bairro.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['descity']) || $_POST['descity'] === '') {
+		Address::setMsgError("Informe a cidade.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['desstate']) || $_POST['desstate'] === '') {
+		Address::setMsgError("Informe o estado.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	if (!isset($_POST['descountry']) || $_POST['descountry'] === '') {
+		Address::setMsgError("Informe o país.");
+		header('Location: /profile/address/:idaddress');
+		exit;
+	}
+
+	$user = User::getFromSession();
+	$address = new Address();
+	$address->get((int) $idaddress);
+	$address->setData($_POST);
+	$address->update();
+	Address::setMsgSuccess("Endereço alterado com sucesso.");
+	header("Location: /profile/addresses");
 	exit;
 
 });

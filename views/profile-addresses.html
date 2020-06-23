@@ -1,0 +1,80 @@
+
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Minha Conta</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">                
+            <div class="col-md-3">
+                {include="profile-menu"}
+            </div>
+            <div class="col-md-9">
+                {if="$success != ''"}
+                <div class="alert alert-success">
+                    {$success}
+                </div>
+                {/if}
+                {if="$error != ''"}
+                <div class="alert alert-danger">
+                    {$error}
+                </div>
+                {/if}                
+                <form>
+					<div class="woocommerce-billing-fields">
+						<h3>Endereços</h3>
+                        {loop="$address"}
+						<table class="shop_table" border="2">
+							<tbody>
+								<thead>
+									<tr style="line-height: 5px" class="">
+										<th class="" style="text-align:left;">{$value.desidentifier}  -  (CEP: {$value.deszipcode})</th>
+										<th class="product-name" width="15"><a href="/profile/address/{$value.idaddress}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a></th>
+									</tr>
+								</thead>
+								<tr style="line-height: 3px" class="">
+									<td colspan="2" class="" style="text-align:left;">
+										<span>{$value.desaddress}, {$value.desnumber} {if="$value.descomplement != ''"} - {$value.descomplement}, {else}- {/if} {$value.desdistrict}</span></
+									</td>
+                                </tr>
+								<tr style="line-height: 3px" class="">
+									<td colspan="2" class="" style="text-align:left; heigth: 1px;">
+										<span>{$value.descity} / {$value.desstate} - {$value.descountry}</span>
+									</td>
+                                </tr>
+							</tbody>
+						</table>
+                        {/loop}
+						<form action="/profile/address/update" class="address" method="get" name="address">
+							<div id="address">
+								<div class="form-row place-order">
+									<!--input type="submit" value="Alterar Endereço" style="margin-top: 30px; "class="button alt"-->
+								</div>
+								<div class="clear"></div>
+							</div>     
+						</form>                                
+						<form action="/profile/address/create" class="new-address" method="get" name="new-address">
+							<div id="new-address">
+								<div class="form-row place-order">
+									<input type="submit" value="Novo Endereço" style="margin-top: 30px; "class="button alt">
+								</div>
+								<div class="clear"></div>
+							</div>     
+						</form>                                   
+					</div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

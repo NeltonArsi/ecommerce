@@ -33,8 +33,9 @@
 											<tbody>
 												<thead>
 													<tr style="line-height: 10px" class="">
-														<th class="" style="text-align:left;"><?php echo htmlspecialchars( $value1["desidentifier"], ENT_COMPAT, 'UTF-8', FALSE ); ?></th>
-														<th width="15"><input type="radio" <?php if( $cart["deszipcode"] === $value1["deszipcode"] ){ ?> checked="checked" <?php } ?>id="address-padrao" name="address-padrao" style="float:center; margin: 5px;"></th>
+														<th class="" style="text-align:left;"><?php echo htmlspecialchars( $value1["desidentifier"], ENT_COMPAT, 'UTF-8', FALSE ); ?>  -  (CEP: <?php echo htmlspecialchars( $value1["deszipcode"], ENT_COMPAT, 'UTF-8', FALSE ); ?>)</th>
+														<th class="product-name" width="15"><a href="/profile/address/<?php echo htmlspecialchars( $value1["idaddress"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Editar</a></th>
+														<th width="15"><input type="radio" <?php if( $cart["deszipcode"] === $value1["deszipcode"] ){ ?> checked="checked" <?php } ?>id="address" name="idaddress" value="<?php echo htmlspecialchars( $value1["idaddress"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" style="float:center; margin: 5px;"></th>
 													</tr>
 												</thead>
 												<tr style="line-height: 3px" class="">
@@ -44,16 +45,24 @@
 	                                            </tr>
 												<tr style="line-height: 3px" class="">
 													<td colspan="2" class="product-name" style="text-align:left; heigth: 1px;">
-														<span><?php echo htmlspecialchars( $value1["descity"], ENT_COMPAT, 'UTF-8', FALSE ); ?> / <?php echo htmlspecialchars( $value1["desstate"], ENT_COMPAT, 'UTF-8', FALSE ); ?> - <?php echo htmlspecialchars( $value1["descountry"], ENT_COMPAT, 'UTF-8', FALSE ); ?> (CEP: <?php echo htmlspecialchars( $value1["deszipcode"], ENT_COMPAT, 'UTF-8', FALSE ); ?>)</span>
+														<span><?php echo htmlspecialchars( $value1["descity"], ENT_COMPAT, 'UTF-8', FALSE ); ?> / <?php echo htmlspecialchars( $value1["desstate"], ENT_COMPAT, 'UTF-8', FALSE ); ?> - <?php echo htmlspecialchars( $value1["descountry"], ENT_COMPAT, 'UTF-8', FALSE ); ?></span>
 													</td>
 	                                            </tr>
 											</tbody>
 										</table>
                                         <?php } ?>
-										<form action="/profile-address" class="new-address" method="post" name="new-addres">
+										<form action="/profile/address/update" class="address" method="get" name="address">
+											<div id="address">
+												<div class="form-row place-order">
+													<!--input type="submit" data-value="Place order" value="Alterar Endereço" id="place_order" name="woocommerce_checkout_place_order" style="margin-top: 30px; "class="button alt"-->
+												</div>
+												<div class="clear"></div>
+											</div>     
+										</form>                                   
+										<form action="/profile/address/create" class="new-address" method="get" name="new-address">
 											<div id="new-address">
 												<div class="form-row place-order">
-													<input type="submit" data-value="Place order" value="Novo Endereço" id="place_order" name="woocommerce_checkout_place_order" style="margin-top: 30px; "class="button alt">
+													<input type="submit" value="Novo Endereço" style="margin-top: 30px; "class="button alt">
 												</div>
 												<div class="clear"></div>
 											</div>     
@@ -100,12 +109,12 @@
 													<th>Frete</th>
 													<td>
 														R$<?php echo formatPrice($cart["vlfreight"]); ?>
-														<input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
+														<input type="hidden" value="<?php echo htmlspecialchars( $cart["vlfreight"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" id="vlfreight" name="vlfreight">
 													</td>
 												</tr>
 												<tr class="order-total">
 													<th>Total do Pedido</th>
-													<td><strong><span class="amount">R$<?php echo formatPrice($cart["vltotal"]); ?></span></strong> </td>
+													<td><strong><span class="amount">R$<?php echo formatPrice($cart["vltotal"]); ?><input type="hidden" value="<?php echo htmlspecialchars( $cart["vltotal"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" id="vltotal" name="vltotal"></span></strong> </td>
 												</tr>
 											</tfoot>
 										</table>
